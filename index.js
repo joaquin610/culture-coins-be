@@ -3,8 +3,14 @@ const db = require('./database/config/db');
 const reconocimientoRouter = require('./api/routes/reconocimientoRouter');
 const app = express();
 const dotenv = require("dotenv").config();
-
-
+//Manejo de cors para entorno local 
+const cors = require('cors');      
+const corsOptions = {     
+  //origin: 'http://localhost:8080/',
+  origin: '*',     
+  methods: 'GET,PUT,POST,DELETE',    
+  //midlewares.push(cors(corsOptions)); 
+}
 app.get('/', (req, res) => {
   res.send('Hola, mundo!');
 });
