@@ -1,3 +1,5 @@
+//const db = require("../../database/schemas")
+
 const controller = {
   test: async (req, res) => {
     res.status(200).json({
@@ -18,7 +20,7 @@ const controller = {
         message: body.message,
       };
 
-      let result = await req.db.Acknowledgment.create(newAcknowledgment);
+      //let result = await req.db.Acknowledgment.create(newAcknowledgment);
       res.status(200).json({
         status: "test",
         ok: true,

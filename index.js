@@ -16,7 +16,8 @@ app.use(cors({
 
 
 //Middlewares
-
+app.use(express.json());
+//app.use(cors());
 
 //Routes
 app.use('/api/acknowledgment', acknowledgmentRouter);
