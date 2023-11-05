@@ -1,40 +1,35 @@
-//const db = require("../../database/schemas")
+const Acknowledgment = require("../../database/schemas/Acknowledgment");
+
 
 const controller = {
-  test: async (req, res) => {
-    res.status(200).json({
-      status: "test",
-      ok: true,
-      data: [],
-    });
-  },
-
   add: async (req, res) => {
     try {
       const { body } = req;
-      let a = req.body;
-      
-      let newAcknowledgment = {
+      let newAcknowledgment = new Acknowledgment({
         userTo: body.userTo,
         userFrom: body.userFrom,
         message: body.message,
-      };
+      });
+      newAcknowledgment
+        .save()
+        .then((doc) => {
+          console.log(doc);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
 
-      //let result = await req.db.Acknowledgment.create(newAcknowledgment);
       res.status(200).json({
         status: "test",
         ok: true,
         data: {},
       });
-
     } catch (error) {
       console.log(error);
       res.status(400).json({
         ok: false,
       });
     }
-
-
   },
 };
 

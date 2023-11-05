@@ -7,4 +7,4 @@ const AcknowledgmentSchema = new Schema({
     message:String
 })
 
-module.exports = AcknowledgmentSchema
+module.exports = mongoose.model('Acknowledgment', AcknowledgmentSchema) 
