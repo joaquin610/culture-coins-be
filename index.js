@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('./database/config/db');
-const acknowledgmentRouter = require('./api/routes/acknowledgmentRouter');
+const recognitionRouter = require('./api/routes/recognitionRouter');
 const app = express();
 const dotenv = require("dotenv").config();
 //Manejo de cors para entorno local 
@@ -20,7 +20,7 @@ app.use(express.json());
 //app.use(cors());
 
 //Routes
-app.use('/api/acknowledgment', acknowledgmentRouter);
+app.use('/api/recognition', recognitionRouter);
 
 
 const server = app.listen(process.env.DB_PORT, () => {

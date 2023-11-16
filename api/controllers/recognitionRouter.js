@@ -1,4 +1,4 @@
-const Acknowledgment = require("../../database/schemas/Acknowledgment");
+const Recognition = require("../../database/schemas/Recognition");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -15,13 +15,13 @@ const controller = {
   add: async (req, res) => {
     try {
       const { body } = req;
-      let newAcknowledgment = new Acknowledgment({
+      let newRecognition = new Recognition({
         userTo: body.userTo,
         userFrom: body.userFrom,
         message: body.message,
       });
 
-      newAcknowledgment
+      newRecognition
         .save()
         .then(async (doc) => {
           console.log(doc);
@@ -29,7 +29,7 @@ const controller = {
           const mailOptions = {
             from: process.env.USER_MAIL,
             to: body.userTo,
-            subject: "New Acknowledgment",
+            subject: "New Recognition",
             text: `User ${body.userFrom} has recognized you`,
           };
 

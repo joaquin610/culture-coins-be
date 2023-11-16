@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 
-const AcknowledgmentSchema = new Schema({
+const RecognitionSchema = new Schema({
     userTo : String,
     userFrom: String,
     message:String
 })
 
-module.exports = mongoose.model('Acknowledgment', AcknowledgmentSchema) 
+module.exports = mongoose.model('Recognition', RecognitionSchema) 
