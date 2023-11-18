@@ -19,6 +19,8 @@ const controller = {
         userTo: body.userTo,
         userFrom: body.userFrom,
         message: body.message,
+        category: body.category,
+        subCategory: body.subCategory
       });
 
       newRecognition
