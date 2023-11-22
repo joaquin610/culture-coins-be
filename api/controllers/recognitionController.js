@@ -1,16 +1,6 @@
 const Recognition = require("../../database/schemas/Recognition");
-const nodemailer = require("nodemailer");
 const {sendEmail} = require ("../helpers/sentEmail")
 require("dotenv").config();
-
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: process.env.USER_MAIL,
-    pass: process.env.PASS_MAIL,
-  },
-});
-
 
 const controller = {
   add: async (req, res) => {

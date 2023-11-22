@@ -1,15 +1,6 @@
 const User = require("../../database/schemas/User");
-const nodemailer = require("nodemailer");
 const {sendEmail} = require ("../helpers/sentEmail")
 require("dotenv").config();
-
-const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.USER_MAIL,
-      pass: process.env.PASS_MAIL,
-    },
-  });
 
   const controller = {
     add: async (req, res) => {
@@ -61,7 +52,7 @@ const transporter = nodemailer.createTransport({
         });
       }
     },
-    notifySupports: async (req, res) => {
+    /*notifySupports: async (req, res) => {
       try {
         const supports = await User.find({ support: true });
         const supportEmails = supports.map((user) => user.email);
@@ -84,7 +75,7 @@ const transporter = nodemailer.createTransport({
           error: "Internal server error",
         });
       }
-    },
+    },*/
   };
   
   module.exports = controller;  
