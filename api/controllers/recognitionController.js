@@ -1,5 +1,6 @@
 const Recognition = require("../../database/schemas/Recognition");
 const nodemailer = require("nodemailer");
+const {sendEmail} = require ("../helpers/sentEmail")
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -15,7 +16,7 @@ const controller = {
   add: async (req, res) => {
     try {
       const { body } = req;
-      let newRecognition = new Recognition({
+      const newRecognition = new Recognition({
         userTo: body.userTo,
         userFrom: body.userFrom,
         message: body.message,
@@ -27,21 +28,7 @@ const controller = {
         .save()
         .then(async (doc) => {
           console.log(doc);
-
-          const mailOptions = {
-            from: process.env.USER_MAIL,
-            to: body.userTo,
-            subject: "New Recognition",
-            text: `User ${body.userFrom} has recognized you`,
-          };
-
-          await transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.error("Error sending the e-mail: " + error);
-            } else {
-              console.log("Sent");
-            }
-          });
+          await sendEmail(body.userTo, "New Recognition", `User ${body.userFrom} has recognized you`);
         })
         .catch((err) => {
           console.error(err);
