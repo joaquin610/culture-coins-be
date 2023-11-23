@@ -19,6 +19,8 @@ const controller = {
         message: body.message,
         priority: body.priority,
         userFrom: body.userFrom,
+        createdAt: new Date(),
+        updatedAt: null
       });
 
       newSupportRequest

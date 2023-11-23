@@ -3,13 +3,11 @@ const {Schema} = mongoose
 
 const SupportRequestSchema = new Schema({
     title : String,
-    message   : String,
-    priority  : String,
-    userFrom :String,
-    Date: {
-        type: Date,
-        default: Date.now
-    }
+    message : String,
+    priority : String,
+    userFrom : String,
+    createdAt: Date,
+    updatedAt: Date
 })
 
 module.exports = mongoose.model('SupportRequest', SupportRequestSchema) 
