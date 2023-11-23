@@ -24,7 +24,7 @@ app.use(express.json());
 //Routes SupportRequest
 app.use('/api/recognition', recognitionRouter);
 app.use('/api/user', userRouter);
-app.use('/api/SupportRequest', supportRequestRouter);
+app.use('/api/supportRequest', supportRequestRouter);
 
 const server = app.listen(process.env.DB_PORT, () => {
   console.log(`Servidor iniciado en el puerto ${process.env.DB_PORT}` );
