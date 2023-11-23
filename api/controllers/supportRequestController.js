@@ -1,13 +1,21 @@
-const SupportRequest = require("../../database/schemas/SupportRequest.JS");
+const SupportRequest = require("../../database/schemas/SupportRequest");
 const { sendEmail } = require("../helpers/sentEmail");
 const User = require("../../database/schemas/User");
 require("dotenv").config();
+
+function sanitizeHTMLTags(input) {
+  return input.replace(/<[^>]*>/g, '');
+}
 
 const controller = {
   add: async (req, res) => {
     try {
       const { body } = req;
+      //const mensajeSanitizado = sanitizeHTMLTags(body.message);
+      const mensajeSanitizado = `${body.title}\n\n${sanitizeHTMLTags(body.message)}`;
+
       const newSupportRequest = new SupportRequest({
+        title : body.title,
         message: body.message,
         priority: body.priority,
         userFrom: body.userFrom,
@@ -23,7 +31,7 @@ const controller = {
           await sendEmail(
             supportEmails,
             "Culture coins - someone needs your help",
-            body.message
+            mensajeSanitizado
           );
         })
         .catch((err) => {
@@ -45,9 +53,7 @@ const controller = {
   },
   listByUser: async (req, res) => {
     try {
-      const user = req.params.user;
-
-      const listByUser = await SupportRequest.find({ userFrom: user });
+      const listByUser = await SupportRequest.find({ userFrom: req.params.user });
       if (listByUser === null) {
         res.status(404).json({
           status: "List by user does not exist",

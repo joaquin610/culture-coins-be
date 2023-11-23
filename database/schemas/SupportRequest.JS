@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 
 const SupportRequestSchema = new Schema({
+    title : String,
     message   : String,
     priority  : String,
     userFrom :String,

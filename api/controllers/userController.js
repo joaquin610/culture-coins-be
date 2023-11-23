@@ -21,20 +21,8 @@ require("dotenv").config();
           .then(async (doc) => {
             console.log(doc);
   
-            const mailOptions = {
-              from: process.env.USER_MAIL,
-              to: body.email,
-              subject: "New User",
-              text: `welcome culture coins`,
-            };
-  
-            await transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                console.error("Error sending the e-mail: " + error);
-              } else {
-                console.log("Sent");
-              }
-            });
+            //await transporter.sendMail(mailOptions, (error, info) => {
+              await sendEmail(body.email, "New User", `welcome culture coins`);
           })
           .catch((err) => {
             console.error(err);
