@@ -5,6 +5,6 @@ const SupportRequest = require('../controllers/supportRequestController')
 //listByUser
 //router.get('/:id', validateJWT, carts.detail)
 router.post('/', SupportRequest.add)
-router.get('/:user/listByUser', SupportRequest.listByUser)
+router.get('/:user', SupportRequest.listByUser)
 
 module.exports = router;

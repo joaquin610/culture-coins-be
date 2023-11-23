@@ -61,7 +61,7 @@ const controller = {
         });
       } else {
         res.status(200).json({
-          status: "Ok",
+          ok:true,
           data: listByUser,
         });
       }
