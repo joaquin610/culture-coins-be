@@ -90,6 +90,7 @@ const controller = {
       }
 
       existingSupportRequest.message = body.message;
+      existingSupportRequest.updatedAt = new Date();
 
       await existingSupportRequest.save();
 
