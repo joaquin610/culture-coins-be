@@ -105,6 +105,58 @@ const controller = {
       });
     }
   },
+  getRequestById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const supportRequest = await SupportRequest.findById(id);
+
+      if (!supportRequest) {
+        return res.status(404).json({
+          ok: false,
+          error: 'Support request not found',
+        });
+      }
+
+      res.status(200).json({
+        ok: true,
+        data: supportRequest,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        error: 'Internal server error',
+      });
+    }
+  },
+  deleteById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const supportRequest = await SupportRequest.findById(id);
+      
+      if (!supportRequest) {
+        return res.status(404).json({
+          ok: false,
+          error: 'Support request not found',
+        });
+      }
+      
+      await supportRequest.deleteOne();
+
+      res.status(200).json({
+        ok: true,
+        message: 'Support request successfully deleted',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        error: 'Internal server error',
+      });
+    }
+  },
 };
 
 module.exports = controller;
