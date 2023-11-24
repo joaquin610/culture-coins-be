@@ -75,6 +75,36 @@ const controller = {
       });
     }
   },
+  edit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { body } = req;
+
+      const existingSupportRequest = await SupportRequest.findById(id);
+
+      if (!existingSupportRequest) {
+        return res.status(404).json({
+          ok: false,
+          error: 'Support request not found',
+        });
+      }
+
+      existingSupportRequest.message = body.message;
+
+      await existingSupportRequest.save();
+
+      res.status(200).json({
+        ok: true,
+        data: existingSupportRequest,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        error: 'Internal server error',
+      });
+    }
+  },
 };
 
 module.exports = controller;
