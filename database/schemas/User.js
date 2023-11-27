@@ -8,7 +8,8 @@ const UserSchema = new Schema({
     birthday : Date,
     admin : Boolean,
     support : Boolean,
-    communities : [String]
+    communities : [String],
+    points: Number,
     
 })
 
