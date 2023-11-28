@@ -11,7 +11,6 @@ const controller = {
   add: async (req, res) => {
     try {
       const { body } = req;
-      //const mensajeSanitizado = sanitizeHTMLTags(body.message);
       const mensajeSanitizado = `${body.title}\n\n${sanitizeHTMLTags(body.message)}`;
 
       const newSupportRequest = new SupportRequest({
@@ -55,7 +54,12 @@ const controller = {
   },
   listByUser: async (req, res) => {
     try {
-      const listByUser = await SupportRequest.find({ userFrom: req.params.user });
+      const listByUser = await SupportRequest.find({
+        userFrom: req.params.user,
+        isDeleted: false,
+        status: { $ne: 'Done' } 
+    });
+    
       if (listByUser === null) {
         res.status(404).json({
           status: "List by user does not exist",
@@ -143,8 +147,11 @@ const controller = {
           error: 'Support request not found',
         });
       }
-      
-      await supportRequest.deleteOne();
+      supportRequest.isDeleted = true;
+      supportRequest.updatedAt = new Date();
+
+      await supportRequest.save();
+
 
       res.status(200).json({
         ok: true,

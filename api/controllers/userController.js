@@ -7,12 +7,13 @@ const controller = {
     try {
       const { body } = req;
       const newUser = new User({
-        name: body.name,
+        firstName: body.firstName,
+        lastName: body.lastName,
         email: body.email,
         password: body.password,
         birthday: body.birthday,
         admin: body.admin,
-        support: body.support,
+        receiveSupportRequest: body.receiveSupportRequest,
         communities: body.communities
       });
 

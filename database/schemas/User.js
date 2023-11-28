@@ -10,7 +10,11 @@ const UserSchema = new Schema({
     admin : Boolean,
     receiveSupportRequest : Boolean,
     communities : [String],
-    points: Number,
+    skills:[Object],
+    points: {
+        type: Number,
+        default: 10
+    }
     
 })
 

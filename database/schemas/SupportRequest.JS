@@ -7,7 +7,15 @@ const SupportRequestSchema = new Schema({
     priority : String,
     userFrom : String,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    status: {
+        type: String,
+        default: "Pending"
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 })
 
 module.exports = mongoose.model('SupportRequest', SupportRequestSchema) 
