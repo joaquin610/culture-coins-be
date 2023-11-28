@@ -36,6 +36,29 @@ const controller = {
       });
     }
   },
+  listByUser: async (req, res) => {
+    try {
+      const listByUser = await Recognition.find({ userTo: req.params.user});
+    
+      if (listByUser === null) {
+        res.status(404).json({
+          status: "List by user does not exist",
+          data: [],
+        });
+      } else {
+        res.status(200).json({
+          ok:true,
+          data: listByUser,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "Internal Error",
+        data: [],
+      });
+    }
+  },
 };
 
 module.exports = controller;
