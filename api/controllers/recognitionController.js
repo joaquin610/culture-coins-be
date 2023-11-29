@@ -1,5 +1,6 @@
 const Recognition = require("../../database/schemas/Recognition");
 const {sendEmail} = require ("../helpers/sentEmail")
+const {sendResponse}  = require ("../helpers/sendResponse");
 require("dotenv").config();
 
 const controller = {
@@ -23,40 +24,24 @@ const controller = {
         .catch((err) => {
           console.error(err);
         });
-
-      res.status(200).json({
-        status: "test",
-        ok: true,
-        data: {},
-      });
+      sendResponse(res, 200, true ,newRecognition);
     } catch (error) {
       console.log(error);
-      res.status(400).json({
-        ok: false,
-      });
+      sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
   listByUser: async (req, res) => {
     try {
       const listByUser = await Recognition.find({ userTo: req.params.user});
     
-      if (listByUser === null) {
-        res.status(404).json({
-          status: "List by user does not exist",
-          data: [],
-        });
+      if (listByUser.length === 0) {
+        sendResponse(res, 404, false ,null, "List by user does not exist");
       } else {
-        res.status(200).json({
-          ok:true,
-          data: listByUser,
-        });
+        sendResponse(res, 200, true ,listByUser);
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        status: "Internal Error",
-        data: [],
-      });
+      sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
 };

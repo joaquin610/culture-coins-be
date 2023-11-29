@@ -1,5 +1,6 @@
 const SupportRequest = require("../../database/schemas/SupportRequest");
 const { sendEmail } = require("../helpers/sentEmail");
+const {sendResponse}  = require ("../helpers/sendResponse");
 const User = require("../../database/schemas/User");
 require("dotenv").config();
 
@@ -38,18 +39,10 @@ const controller = {
         .catch((err) => {
           console.error(err);
         });
-
-      res.status(200).json({
-        status: "Notification sent to support users",
-        ok: true,
-        data: {},
-      });
+      sendResponse(res, 200, true ,newSupportRequest);
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: "Internal server error",
-      });
+      sendResponse(res, 500, false ,null, "Internal server error");
     }
   },
   listByUser: async (req, res) => {
@@ -60,23 +53,14 @@ const controller = {
         status: { $ne: 'Done' } 
     });
     
-      if (listByUser === null) {
-        res.status(404).json({
-          status: "List by user does not exist",
-          data: [],
-        });
+      if (listByUser.length === 0) {
+        sendResponse(res, 404, false ,null, "List by user does not exist");
       } else {
-        res.status(200).json({
-          ok:true,
-          data: listByUser,
-        });
+        sendResponse(res, 200, true ,listByUser);
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        status: "Internal Error",
-        data: [],
-      });
+      sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
   edit: async (req, res) => {
@@ -86,11 +70,8 @@ const controller = {
 
       const existingSupportRequest = await SupportRequest.findById(id);
 
-      if (!existingSupportRequest) {
-        return res.status(404).json({
-          ok: false,
-          error: 'Support request not found',
-        });
+      if (existingSupportRequest.length === 0) {
+        return sendResponse(res, 404, false ,null, "Support request not found");
       }
 
       existingSupportRequest.message = body.message;
@@ -98,16 +79,10 @@ const controller = {
 
       await existingSupportRequest.save();
 
-      res.status(200).json({
-        ok: true,
-        data: existingSupportRequest,
-      });
+      sendResponse(res, 200, true , existingSupportRequest);
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: 'Internal server error',
-      });
+      return sendResponse(res, 500, false ,null, 'Internal server error');
     }
   },
   getRequestById: async (req, res) => {
@@ -116,23 +91,14 @@ const controller = {
 
       const supportRequest = await SupportRequest.findById(id);
 
-      if (!supportRequest) {
-        return res.status(404).json({
-          ok: false,
-          error: 'Support request not found',
-        });
+      if (supportRequest.length === 0) {
+        return sendResponse(res, 404, false ,null, 'Support request not found');
       }
+      sendResponse(res, 200, true ,supportRequest);
 
-      res.status(200).json({
-        ok: true,
-        data: supportRequest,
-      });
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: 'Internal server error',
-      });
+      sendResponse(res, 500, false ,null, 'Internal server error');
     }
   },
   deleteById: async (req, res) => {
@@ -141,30 +107,46 @@ const controller = {
 
       const supportRequest = await SupportRequest.findById(id);
       
-      if (!supportRequest) {
-        return res.status(404).json({
-          ok: false,
-          error: 'Support request not found',
-        });
+      if (supportRequest.length === 0) {
+        return sendResponse(res, 404, false ,null, 'Support request not found');
       }
       supportRequest.isDeleted = true;
       supportRequest.updatedAt = new Date();
 
       await supportRequest.save();
 
-
-      res.status(200).json({
-        ok: true,
-        message: 'Support request successfully deleted',
-      });
+      sendResponse(res, 200, true ,supportRequest);
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: 'Internal server error',
-      });
+      sendResponse(res, 500, false ,null, 'Internal server error');
     }
   },
+  changeStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const existingSupportRequest = await SupportRequest.findById(id);
+
+      if (existingSupportRequest.length === 0) {
+        return sendResponse(res, 404, false ,null, "Support request not found");
+      }
+      if(existingSupportRequest.status === "Pending"){
+        existingSupportRequest.status = "In progress";
+      }else{
+        existingSupportRequest.status = "Done";
+      }
+      
+      existingSupportRequest.updatedAt = new Date();
+
+      await existingSupportRequest.save();
+
+      sendResponse(res, 200, true ,existingSupportRequest);
+    } catch (error) {
+      console.error(error);
+      return sendResponse(res, 500, false ,null, 'Internal server error');
+    }
+  },
+  
 };
 
 module.exports = controller;

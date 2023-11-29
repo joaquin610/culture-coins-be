@@ -1,4 +1,5 @@
 const User = require("../../database/schemas/User");
+const {sendResponse}  = require ("../helpers/sendResponse");
 const { sendEmail } = require("../helpers/sentEmail");
 require("dotenv").config();
 
@@ -14,7 +15,8 @@ const controller = {
         birthday: body.birthday,
         admin: body.admin,
         receiveSupportRequest: body.receiveSupportRequest,
-        communities: body.communities
+        communities: body.communities,
+        skills: body.skills
       });
 
       newUser
@@ -22,23 +24,15 @@ const controller = {
         .then(async (doc) => {
           console.log(doc);
 
-          //await transporter.sendMail(mailOptions, (error, info) => {
           await sendEmail(body.email, "New User", `welcome culture coins`);
         })
         .catch((err) => {
           console.error(err);
         });
-
-      res.status(200).json({
-        status: "test",
-        ok: true,
-        data: {},
-      });
+      sendResponse(res, 200, true ,newUser);
     } catch (error) {
       console.log(error);
-      res.status(400).json({
-        ok: false,
-      });
+      sendResponse(res, 400, false ,null, 'Internal server error');
     }
   },
   getUserByEmail: async (req, res) => {
@@ -47,14 +41,10 @@ const controller = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+       return sendResponse(res, 404, false ,null,'User not found');
       }
+      return sendResponse(res, 200, true , user);
 
-      //res.json(user);
-      res.status(200).json({
-        ok: true,
-        data: user,
-      });
     } catch (err) {
       res.status(500).json({ message: err.message, ok: false });
     }
