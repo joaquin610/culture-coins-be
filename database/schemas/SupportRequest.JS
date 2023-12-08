@@ -6,7 +6,10 @@ const SupportRequestSchema = new Schema({
     message : String,
     priority : String,
     userFrom : String,
-    createdAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     updatedAt: Date,
     status: {
         type: String,
