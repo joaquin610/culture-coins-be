@@ -33,12 +33,9 @@ const controller = {
   listByUser: async (req, res) => {
     try {
       const listByUser = await Recognition.find({ userTo: req.params.user});
-    
-      if (listByUser.length === 0) {
-        sendResponse(res, 404, false ,null, "List by user does not exist");
-      } else {
+
         sendResponse(res, 200, true ,listByUser);
-      }
+      
     } catch (error) {
       console.log(error);
       sendResponse(res, 500, false ,null, "Internal Error");
