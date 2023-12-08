@@ -6,7 +6,11 @@ const RecognitionSchema = new Schema({
     userFrom: String,
     message:String,
     category: String,
-    subCategory: [String]
+    subCategory: [String],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
 })
 
 module.exports = mongoose.model('Recognition', RecognitionSchema) 
