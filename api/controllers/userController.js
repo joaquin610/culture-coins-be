@@ -48,6 +48,21 @@ const controller = {
     } catch (err) {
       res.status(500).json({ message: err.message, ok: false });
     }
+  },
+  putUpdate: async (req, res) => {
+    const { email } = req.params;
+    try {
+      const user = await User.findOne({ email });  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found', ok: false });
+      }  
+      Object.assign(user, req.body);  
+      await user.save(); 
+      return sendResponse(res, 200, true, user); 
+    } catch (err) {
+
+      res.status(500).json({ message: err.message, ok: false });
+    }
   }
   /*notifySupports: async (req, res) => {
     try {
