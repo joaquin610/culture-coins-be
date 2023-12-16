@@ -1,6 +1,7 @@
 const SupportRequest = require("../../database/schemas/SupportRequest");
 const { sendEmail } = require("../helpers/sentEmail");
 const {sendResponse}  = require ("../helpers/sendResponse");
+const {orderByDate}  = require ("../helpers/orderByDate");
 const User = require("../../database/schemas/User");
 require("dotenv").config();
 
@@ -47,7 +48,7 @@ const controller = {
   },
   listByUser: async (req, res) => {
     try {
-      const listByUser = await SupportRequest.find({
+      let listByUser = await SupportRequest.find({
         userFrom: req.params.user,
         isDeleted: false,
         status: { $ne: 'Done' } 
@@ -56,6 +57,7 @@ const controller = {
       if (listByUser.length === 0) {
         sendResponse(res, 404, false ,null, "List by user does not exist");
       } else {
+        listByUser = orderByDate(listByUser);
         sendResponse(res, 200, true ,listByUser);
       }
     } catch (error) {

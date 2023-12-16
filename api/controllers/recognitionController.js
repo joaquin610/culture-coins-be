@@ -1,6 +1,7 @@
 const Recognition = require("../../database/schemas/Recognition");
 const {sendEmail} = require ("../helpers/sentEmail")
 const {sendResponse}  = require ("../helpers/sendResponse");
+const {orderByDate}  = require ("../helpers/orderByDate");
 require("dotenv").config();
 
 const controller = {
@@ -32,8 +33,8 @@ const controller = {
   },
   listByUser: async (req, res) => {
     try {
-      const listByUser = await Recognition.find({ userTo: req.params.user});
-
+      let listByUser = await Recognition.find({ userTo: req.params.user});
+      listByUser = orderByDate(listByUser)
         sendResponse(res, 200, true ,listByUser);
       
     } catch (error) {

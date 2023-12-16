@@ -39,7 +39,7 @@ const controller = {
     const { email } = req.params;
     try {
       const user = await User.findOne({ email });
-
+      user.password = undefined;
       if (!user) {
        return sendResponse(res, 404, false ,null,'User not found');
       }
@@ -56,8 +56,10 @@ const controller = {
       if (!user) {
         return res.status(404).json({ message: 'User not found', ok: false });
       }  
-      Object.assign(user, req.body);  
+      const { password, ...updatedFields } = req.body;
+      Object.assign(user, updatedFields);  
       await user.save(); 
+      user.password = undefined;
       return sendResponse(res, 200, true, user); 
     } catch (err) {
 
