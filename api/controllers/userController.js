@@ -1,5 +1,5 @@
 const User = require("../../database/schemas/User");
-const {sendResponse}  = require ("../helpers/sendResponse");
+const { sendResponse } = require("../helpers/sendResponse");
 const { sendEmail } = require("../helpers/sentEmail");
 require("dotenv").config();
 
@@ -8,6 +8,7 @@ const controller = {
     try {
       const { body } = req;
       const newUser = new User({
+        nickName: body.nickName,
         firstName: body.firstName,
         lastName: body.lastName,
         email: body.email,
@@ -29,10 +30,10 @@ const controller = {
         .catch((err) => {
           console.error(err);
         });
-      sendResponse(res, 200, true ,newUser);
+      sendResponse(res, 200, true, newUser);
     } catch (error) {
       console.log(error);
-      sendResponse(res, 400, false ,null, 'Internal server error');
+      sendResponse(res, 400, false, null, 'Internal server error');
     }
   },
   getUserByEmail: async (req, res) => {
@@ -41,29 +42,33 @@ const controller = {
       const user = await User.findOne({ email });
       user.password = undefined;
       if (!user) {
-       return sendResponse(res, 404, false ,null,'User not found');
+        return sendResponse(res, 404, false, null, 'User not found');
       }
-      return sendResponse(res, 200, true , user);
+      return sendResponse(res, 200, true, user);
 
     } catch (err) {
       res.status(500).json({ message: err.message, ok: false });
     }
   },
-  putUpdate: async (req, res) => {
-    const { email } = req.params;
+  updateUser: async (req, res) => {
+    const { _id } = req.body;
+    const updateData = req.body;
     try {
-      const user = await User.findOne({ email });  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found', ok: false });
-      }  
-      const { password, ...updatedFields } = req.body;
-      Object.assign(user, updatedFields);  
-      await user.save(); 
-      user.password = undefined;
-      return sendResponse(res, 200, true, user); 
-    } catch (err) {
+      const user = await User.findOneAndUpdate(
+        { _id: _id },
+        updateData,
+        { new: true }
+      );
 
-      res.status(500).json({ message: err.message, ok: false });
+      if (!user) {
+        throw 'User not found';
+      }
+
+      delete user.password;
+      return sendResponse(res, 200, true, user);
+
+    } catch (err) {
+      res.status(404).json({ message: err, ok: false });
     }
   }
   /*notifySupports: async (req, res) => {
