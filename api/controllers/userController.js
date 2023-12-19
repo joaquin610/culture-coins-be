@@ -8,6 +8,7 @@ const controller = {
     try {
       const { body } = req;
       const newUser = new User({
+        nickName: body.nickName,
         firstName: body.firstName,
         lastName: body.lastName,
         email: body.email,
@@ -66,31 +67,6 @@ const controller = {
       res.status(500).json({ message: err.message, ok: false });
     }
   }
-  /*notifySupports: async (req, res) => {
-    try {
-      const supports = await User.find({ support: true });
-      const supportEmails = supports.map((user) => user.email);
-
-      const { body } = req;
-      const subject = body.subject;
-      const text = body.text;
- 
-      await sendEmail(supportEmails, subject, text);
- 
-      res.status(200).json({
-        status: "Notification sent to support users",
-        ok: true,
-        data: {},
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: "Internal server error",
-      });
-    }
-  },*/
-
 };
 
 module.exports = controller;  
