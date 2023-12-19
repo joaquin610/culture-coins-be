@@ -31,15 +31,18 @@ const controller = {
       sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
-  listByUser: async (req, res) => {
+  list: async (req, res) => {
     try {
-      let listByUser = await Recognition.find({ userTo: req.params.user});
-      listByUser = orderByDate(listByUser)
-        sendResponse(res, 200, true ,listByUser);
-      
+      let query = {};      
+      if (req.params.user) {
+        query.userTo = req.params.user;
+      }
+      let listByUser = await Recognition.find(query);
+      listByUser = orderByDate(listByUser);      
+      sendResponse(res, 200, true, listByUser);
     } catch (error) {
       console.log(error);
-      sendResponse(res, 500, false ,null, "Internal Error");
+      sendResponse(res, 500, false, null, "Internal Error");
     }
   },
 };
