@@ -28,7 +28,7 @@ app.use('/api/recognition', recognitionRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supportRequest', supportRequestRouter);
 app.use('/api/ValuesBehaviors', valuesBehaviorsRouter);
-app.use('/api/skill', skillRouter);
+app.use('/api/skills', skillRouter);
 
 const server = app.listen(process.env.DB_PORT, () => {
   console.log(`Servidor iniciado en el puerto ${process.env.DB_PORT}` );
