@@ -45,6 +45,21 @@ const controller = {
       sendResponse(res, 500, false, null, "Internal Error");
     }
   },
+  listLastMinute: async (req, res) => {
+    try {
+      const currentTime = new Date();
+      const lastMinuteTime = new Date(currentTime.getTime() - 60000);
+
+      const lastMinuteRecognitions = await Recognition.find({
+        createdAt: { $gte: lastMinuteTime, $lte: currentTime },
+      });
+
+      sendResponse(res, 200, true, lastMinuteRecognitions);
+    } catch (error) {
+      console.log(error);
+      sendResponse(res, 500, false, null, "Internal Error");
+    }
+  },
 };
 
 module.exports = controller;
