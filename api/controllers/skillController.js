@@ -20,7 +20,8 @@ const controller = {
     list: async (req, res) => {
         try {
           const list = await Skill.find();
-          sendResponse(res, 200, true, list);
+          const listOrder = list.sort((a, b) => a.name.localeCompare(b.name));
+          sendResponse(res, 200, true, listOrder);
         } catch (error) {
           console.log(error);
           sendResponse(res, 500, false, null, "Internal Error");
