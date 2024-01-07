@@ -9,8 +9,9 @@ const controller = {
     try {
       const { body } = req;
       const newRecognition = new Recognition({
-        userTo: body.userTo,
-        userFrom: body.userFrom,
+        userToEmail: body.userToEmail,
+        userToNickName: body.userToNickName,
+        userFromNickName: body.userFromNickName,
         message: body.message,
         category: body.category,
         subCategory: body.subCategory
@@ -20,7 +21,7 @@ const controller = {
         .save()
         .then(async (doc) => {
           console.log(doc);
-          await sendEmail(body.userTo, "New Recognition", `User ${body.userFrom} has recognized you`);
+          await sendEmail(body.userToEmail, "New Recognition", `User ${body.userFromNickName} has recognized you`);
         })
         .catch((err) => {
           console.error(err);
@@ -35,7 +36,7 @@ const controller = {
     try {
       let query = {};      
       if (req.params.user) {
-        query.userTo = req.params.user;
+        query.userToEmail = req.params.user;
       }
       let listByUser = await Recognition.find(query);
       listByUser = orderByDate(listByUser);      

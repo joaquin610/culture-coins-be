@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 
 const RecognitionSchema = new Schema({
-    userTo : String,
-    userFrom: String,
+    userToEmail : String,
+    userToNickName: String,
+    userFromNickName: String,
     message:String,
     category: String,
     subCategory: [String],
