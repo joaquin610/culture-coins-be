@@ -5,6 +5,7 @@ const userRouter = require('./api/routes/userRouter');
 const supportRequestRouter = require('./api/routes/supportRequestRouter');
 const valuesBehaviorsRouter = require('./api/routes/valuesBehaviorsRouter');
 const skillRouter = require('./api/routes/skillRouter');
+const teamRouter = require('./api/routes/teamRouter');
 const app = express();
 const dotenv = require("dotenv").config();
 //Manejo de cors para entorno local 
@@ -29,6 +30,7 @@ app.use('/api/user', userRouter);
 app.use('/api/supportRequest', supportRequestRouter);
 app.use('/api/ValuesBehaviors', valuesBehaviorsRouter);
 app.use('/api/skills', skillRouter);
+app.use('/api/teams', teamRouter);
 
 const server = app.listen(process.env.DB_PORT, () => {
   console.log(`Servidor iniciado en el puerto ${process.env.DB_PORT}` );
