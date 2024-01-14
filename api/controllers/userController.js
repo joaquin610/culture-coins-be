@@ -17,7 +17,8 @@ const controller = {
         admin: body.admin,
         receiveSupportRequest: body.receiveSupportRequest,
         communities: body.communities,
-        skills: body.skills
+        skills: body.skills,
+        teams: body.teams
       });
 
       newUser

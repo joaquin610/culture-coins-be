@@ -12,6 +12,7 @@ const UserSchema = new Schema({
     receiveSupportRequest : Boolean,
     communities : [String],
     skills:[String],
+    teams:[String],
     points: {
         type: Number,
         default: 10
