@@ -71,7 +71,15 @@ const controller = {
     } catch (err) {
       res.status(404).json({ message: err, ok: false });
     }
-  }
+  },
+  getListUsers: async (req, res) => {
+    try {
+      const users = await User.find();
+      return sendResponse(res, 200, true, users);
+    } catch (error) {
+      sendResponse(res, 500, false ,null, "Internal Error");
+    }
+  },
   /*notifySupports: async (req, res) => {
     try {
       const supports = await User.find({ support: true });
