@@ -7,8 +7,17 @@ const valuesBehaviorsRouter = require('./api/routes/valuesBehaviorsRouter');
 const skillRouter = require('./api/routes/skillRouter');
 const teamRouter = require('./api/routes/teamRouter');
 const communityRouter = require('./api/routes/CommunityRouter');
-const app = express();
 const dotenv = require("dotenv").config();
+const loginRouter = require("./api/routes/microsoft");
+const passport = require("passport");
+require("./api/middlewares/microsoft");
+const app = express();
+
+app.use(passport.initialize());
+
+app.use("/auth", loginRouter);
+
+
 //Manejo de cors para entorno local 
 const cors = require('cors');      
 
