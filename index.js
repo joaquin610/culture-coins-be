@@ -21,8 +21,9 @@ app.use("/auth", loginRouter);
 //Manejo de cors para entorno local 
 const cors = require('cors');      
 
-app.get('/', (req, res) => {
-  res.send('Hola, mundo!');
+app.get('/:user', (req, res) => {
+  const user  = req.params.user;
+  res.send('Hola ' + user);
 });
 
 app.use(cors({

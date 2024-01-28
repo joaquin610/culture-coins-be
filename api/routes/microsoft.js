@@ -10,8 +10,10 @@ router.get("/microsoft/callback",
   passport.authenticate("microsoft", { failureRedirect: "/login", session: false }),
   function(req, res) {
     // Successful authentication, redirect home.
-    console.log(res);
-    res.redirect("/");
+    
+    console.log("mail: ",res.req.user._json.mail);
+    res.redirect("/"+res.req.user._json.mail);
   });
 
 module.exports = router;
+
