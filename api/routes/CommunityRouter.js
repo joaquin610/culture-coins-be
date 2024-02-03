@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const community = require('../controllers/communityController')
+const validateToken = require('../middlewares/validateToken');
 
 
-router.post('/', community.add)
-router.get('/', community.list);
-router.delete('/:id', community.delete);
+router.post('/',validateToken, community.add)
+router.get('/',validateToken, community.list);
+router.delete('/:id',validateToken, community.delete);
 module.exports = router;

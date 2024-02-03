@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const recognition = require('../controllers/recognitionController')
+const validateToken = require('../middlewares/validateToken');
 
 //router.get('/:id', validateJWT, carts.detail)
-router.post('/', recognition.add)
-router.get('/lastMinute', recognition.listLastMinute);
-router.get('/:user', recognition.list);
-router.get('/', recognition.list);
+router.post('/',validateToken, recognition.add)
+router.get('/lastMinute',validateToken, recognition.listLastMinute);
+router.get('/:user',validateToken, recognition.list);
+router.get('/',validateToken, recognition.list);
 module.exports = router;

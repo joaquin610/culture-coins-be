@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Team = require('../controllers/teamController')
+const validateToken = require('../middlewares/validateToken');
 
-
-router.post('/', Team.add)
-router.get('/', Team.list);
-router.delete('/:id', Team.delete);
+router.post('/',validateToken, Team.add)
+router.get('/',validateToken, Team.list);
+router.delete('/:id',validateToken, Team.delete);
 
 
 module.exports = router;

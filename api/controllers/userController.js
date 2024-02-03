@@ -2,6 +2,7 @@ const User = require("../../database/schemas/User");
 const { sendResponse } = require("../helpers/sendResponse");
 const { sendEmail } = require("../helpers/sentEmail");
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
 
 const controller = {
   add: async (req, res) => {
@@ -37,15 +38,65 @@ const controller = {
       sendResponse(res, 400, false, null, 'Internal server error');
     }
   },
-  getUserByEmail: async (req, res) => {
-    const { email } = req.params;
-    try {
+  addLogin: async (req, res) => {
+     try {
+      const email = req._json.mail; 
       const user = await User.findOne({ email });
-      user.password = undefined;
+      console.log(user);
       if (!user) {
-        return sendResponse(res, 404, false, null, 'User not found');
+        try {
+          const { body } = req;
+          const newUser = new User({
+            nickName: req._json.displayName,
+            firstName: req._json.givenName,
+            lastName: req._json.surname,
+            email: req._json.mail,
+            password: null,
+            birthday: null,
+            admin: false,
+            receiveSupportRequest: false,
+            communities:[],
+            skills: [],
+            teams: []
+          });
+    
+          newUser
+            .save()
+            .then(async (doc) => {
+              console.log(doc);
+              await sendEmail(req._json.mail, "New User", `welcome culture coins`);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+          sendResponse(res, 200, true, newUser);
+        } catch (error) {
+          console.log(error);
+          sendResponse(res, 400, false, null, 'Internal server error');
+        }
       }
-      return sendResponse(res, 200, true, user);
+
+     } catch (error) {
+
+     }
+  },
+  getUserByEmail: async (req, res) => {
+    
+    //const { email } = req.params;
+    const token = req.headers['authorization'];
+
+    try {
+      
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
+
+        const email = user.email;
+
+        const userFind = await User.findOne({ email });
+        if (!userFind) {
+          return sendResponse(res, 404, false, null, 'User not found');
+        }
+        return sendResponse(res, 200, true, userFind);
+      });
 
     } catch (err) {
       res.status(500).json({ message: err.message, ok: false });
