@@ -1,4 +1,5 @@
 const Recognition = require("../../database/schemas/Recognition");
+const User = require("../../database/schemas/User");
 const {sendEmail} = require ("../helpers/sentEmail")
 const {sendResponse}  = require ("../helpers/sendResponse");
 const {orderByDate}  = require ("../helpers/orderByDate");
@@ -8,10 +9,16 @@ const controller = {
   add: async (req, res) => {
     try {
       const { body } = req;
+      const userToEmail = body.userToEmail;
+      const userFromEmail = body.userFromEmail;
+
+      const userTo = await User.findOne({ email: userToEmail });
+      const userFrom = await User.findOne({email: userFromEmail });
+
       const newRecognition = new Recognition({
-        userToEmail: body.userToEmail,
-        userToNickName: body.userToNickName,
-        userFromNickName: body.userFromNickName,
+        userToEmail: userToEmail,
+        userToNickName: userTo.nickName,
+        userFromNickName: userFrom.nickName,
         message: body.message,
         category: body.category,
         subCategory: body.subCategory
@@ -21,7 +28,7 @@ const controller = {
         .save()
         .then(async (doc) => {
           console.log(doc);
-          await sendEmail(body.userToEmail, "New Recognition", `User ${body.userFromNickName} has recognized you`);
+          await sendEmail(userToEmail, "New Recognition", `User ${userFrom.nickName} has recognized you`);
         })
         .catch((err) => {
           console.error(err);

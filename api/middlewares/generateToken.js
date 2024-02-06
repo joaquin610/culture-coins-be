@@ -16,7 +16,7 @@ function generateToken(req, res, next) {
 
   // Guarda el token en req.token para que los siguientes middlewares puedan acceder a él
   req.token = token;
-
+  console.log(token);
   // Pasa al siguiente middleware
   next();
 }
