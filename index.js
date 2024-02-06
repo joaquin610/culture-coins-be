@@ -4,7 +4,6 @@ const recognitionRouter = require('./api/routes/recognitionRouter');
 const userRouter = require('./api/routes/userRouter');
 const supportRequestRouter = require('./api/routes/supportRequestRouter');
 const valuesBehaviorsRouter = require('./api/routes/valuesBehaviorsRouter');
-const skillRouter = require('./api/routes/skillRouter');
 const teamRouter = require('./api/routes/teamRouter');
 const communityRouter = require('./api/routes/CommunityRouter');
 const dotenv = require("dotenv").config();
@@ -45,7 +44,6 @@ app.use('/api/recognition', recognitionRouter);
 app.use('/api/user', userRouter);
 app.use('/api/supportRequest', supportRequestRouter);
 app.use('/api/ValuesBehaviors', valuesBehaviorsRouter);
-app.use('/api/skills', skillRouter);
 app.use('/api/teams', teamRouter);
 app.use('/api/Communities', communityRouter);
 
