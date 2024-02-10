@@ -13,12 +13,9 @@ const controller = {
         firstName: body.firstName,
         lastName: body.lastName,
         email: body.email,
-        password: body.password,
-        birthday: body.birthday,
         admin: body.admin,
         receiveSupportRequest: body.receiveSupportRequest,
         communities: body.communities,
-        skills: body.skills,
         teams: body.teams
       });
 
@@ -51,12 +48,9 @@ const controller = {
             firstName: req._json.givenName,
             lastName: req._json.surname,
             email: req._json.mail,
-            password: null,
-            birthday: null,
             admin: false,
             receiveSupportRequest: false,
             communities:[],
-            skills: [],
             teams: []
           });
     
@@ -116,7 +110,6 @@ const controller = {
         throw 'User not found';
       }
 
-      delete user.password;
       return sendResponse(res, 200, true, user);
 
     } catch (err) {

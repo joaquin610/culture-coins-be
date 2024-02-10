@@ -6,12 +6,9 @@ const UserSchema = new Schema({
     firstName : String,
     lastName : String,
     email : String,
-    password : String,
-    birthday : Date,
     admin : Boolean,
     receiveSupportRequest : Boolean,
     communities : [String],
-    skills:[String],
     teams:[String],
     points: {
         type: Number,
