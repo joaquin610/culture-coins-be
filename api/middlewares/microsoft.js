@@ -10,6 +10,13 @@ passport.use(new MicrosoftStrategy({
     scope: ['User.Read', 'mail.read']
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log("entro middleware microsoft");
+    const email = profile._json.mail;
+
+    // Verifica si el correo electrónico termina en '@igglobal.com'
+    if (email.endsWith('@igglobal.com')) {
+      return done('Invalid email');
+    }
     userRouter.addLogin(profile)
 
     return done(null, profile);
