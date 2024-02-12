@@ -68,6 +68,36 @@ const controller = {
       sendResponse(res, 500, false, null, "Internal Error");
     }
   },
+  topValues: async (req, res) => {
+    try {
+      const topSubCategories = await Recognition.aggregate([
+        { $unwind: "$subCategory" },
+        { $sort: { createdAt: -1 } },
+        { 
+          $group: { 
+            _id: "$subCategory", 
+            count: { $sum: 1 },
+            lastRecognition: { $first: "$$ROOT" }
+          } 
+        },
+        { 
+          $project: { 
+            count: 1,
+            userToNickName: "$lastRecognition.userToNickName",
+            userFromNickName: "$lastRecognition.userFromNickName",
+            createdAt: "$lastRecognition.createdAt",
+            message: "$lastRecognition.message"
+          } 
+        },
+        { $sort: { count: -1 } },
+        { $limit: 10 }
+      ]);
+  
+      sendResponse(res, 200, true, topSubCategories);
+    } catch (error) {
+      sendResponse(res, 500, false, null, "Internal Error");
+    }
+  } 
 };
 
 module.exports = controller;
