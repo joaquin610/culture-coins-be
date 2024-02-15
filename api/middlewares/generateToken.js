@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 function generateToken(req, res, next) {
   const { body } = req;
   let email;
-  if (body.username != undefined) {
+  if (body != undefined && body.username != undefined) {
     email = body.username;
   }else {
     email = req.user._json.mail;
