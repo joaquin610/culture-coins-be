@@ -62,7 +62,7 @@ const controller = {
             })
             .catch((err) => {
               console.error(err);
-            });
+            }); 
           sendResponse(res, 200, true, newUser);
         } catch (error) {
           console.log(error);
@@ -124,6 +124,66 @@ const controller = {
       sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
+  register: async (req, res) => {
+    try {
+      const { body } = req;
+      const email = body.email;
+
+      const userFind = await User.findOne({ email});
+
+      if(!userFind) {
+      const { body } = req;
+      const newUser = new User({
+        nickName: body.nickName,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: email,
+        password: body.password,
+        admin: false,
+        receiveSupportRequest: false,
+        communities: [],
+        teams: []
+      });
+
+      newUser
+        .save()
+        .then(async (doc) => {
+          console.log(doc);
+
+          await sendEmail(email, "New User", `welcome culture coins`);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      sendResponse(res, 200, true, newUser);
+      } else {
+        sendResponse(res, 409 , false, null, 'User already exists');
+      }
+    } catch (error) {
+      console.log(error);
+      sendResponse(res, 400, false, null, 'Internal server error');
+    }
+  },
+  login: async (req, res) => {
+    try {
+
+      const { body } = req;
+      const email = body.username;
+      const password = body.password;
+
+      const userFind = await User.findOne({ email, password });
+      if (userFind) {
+        sendResponse(res, 200, true, req.token);
+      }else{
+        sendResponse(res, 404, false, null, 'User not found');
+      }
+     
+    } catch (error) {
+      console.log(error);
+      sendResponse(res, 400, false, null, 'Internal server error');
+    }
+  } 
   /*notifySupports: async (req, res) => {
     try {
       const supports = await User.find({ support: true });
