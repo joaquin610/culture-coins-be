@@ -6,11 +6,10 @@ const userRouter = require('../controllers/userController')
 passport.use(new MicrosoftStrategy({
     clientID: process.env.MICROSOFT_CLIENT_ID,
     clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/microsoft/callback",
+    callbackURL: process.env.BASE_URL_BE + "auth/microsoft/callback",
     scope: ['User.Read', 'mail.read']
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log("entro middleware microsoft");
     const email = profile._json.mail;
 
     // Verifica si el correo electrónico termina en '@igglobal.com'

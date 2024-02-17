@@ -11,8 +11,8 @@ router.get("/microsoft/callback",
   passport.authenticate("microsoft", { failureRedirect: "/login", session: false }),generateToken,
   function(req, res) {
     
-    console.log("mail: ",res.req.user._json.mail);
-    const redirectUrl = `http://localhost:8080/#/ViewMyPersonalDataPoints?token=${req.token}`;
+    console.log(process.env.BASE_URL_FE);
+    const redirectUrl = `${process.env.BASE_URL_FE}ViewMyPersonalDataPoints?token=${req.token}`;
     res.redirect(redirectUrl);
   });
 

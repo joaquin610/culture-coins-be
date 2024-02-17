@@ -22,8 +22,6 @@ const controller = {
       newUser
         .save()
         .then(async (doc) => {
-          console.log(doc);
-
           await sendEmail(body.email, "New User", `welcome culture coins`);
         })
         .catch((err) => {
@@ -39,7 +37,6 @@ const controller = {
      try {
       const email = req._json.mail; 
       const user = await User.findOne({ email });
-      console.log(user);
       if (!user) {
         try {
           const { body } = req;
@@ -57,7 +54,6 @@ const controller = {
           newUser
             .save()
             .then(async (doc) => {
-              console.log(doc);
               await sendEmail(req._json.mail, "New User", `welcome culture coins`);
             })
             .catch((err) => {
@@ -148,8 +144,6 @@ const controller = {
       newUser
         .save()
         .then(async (doc) => {
-          console.log(doc);
-
           await sendEmail(email, "New User", `welcome culture coins`);
         })
         .catch((err) => {

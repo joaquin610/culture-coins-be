@@ -27,7 +27,6 @@ const controller = {
       newRecognition
         .save()
         .then(async (doc) => {
-          console.log(doc);
           await sendEmail(userToEmail, "New Recognition", `User ${userFrom.nickName} has recognized you`);
         })
         .catch((err) => {
