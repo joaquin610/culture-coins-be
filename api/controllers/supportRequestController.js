@@ -53,12 +53,9 @@ const controller = {
         status: { $ne: 'Done' } 
     });
     
-      if (listByUser.length === 0) {
-        sendResponse(res, 404, false ,null, "List by user does not exist");
-      } else {
         listByUser = orderByDate(listByUser);
         sendResponse(res, 200, true ,listByUser);
-      }
+
     } catch (error) {
       console.log(error);
       sendResponse(res, 500, false ,null, "Internal Error");
