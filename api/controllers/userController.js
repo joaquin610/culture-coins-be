@@ -71,8 +71,7 @@ const controller = {
      }
   },
   getUserByEmail: async (req, res) => {
-    
-    //const { email } = req.params;
+
     const token = req.headers['authorization'];
 
     try {
@@ -178,30 +177,6 @@ const controller = {
       sendResponse(res, 400, false, null, 'Internal server error');
     }
   } 
-  /*notifySupports: async (req, res) => {
-    try {
-      const supports = await User.find({ support: true });
-      const supportEmails = supports.map((user) => user.email);
-
-      const { body } = req;
-      const subject = body.subject;
-      const text = body.text;
- 
-      await sendEmail(supportEmails, subject, text);
- 
-      res.status(200).json({
-        status: "Notification sent to support users",
-        ok: true,
-        data: {},
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        ok: false,
-        error: "Internal server error",
-      });
-    }
-  },*/
 
 };
 

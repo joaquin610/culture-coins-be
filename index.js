@@ -37,7 +37,6 @@ app.use(cors({
 
 //Middlewares
 app.use(express.json());
-//app.use(cors());
 
 //Routes SupportRequest
 app.use('/api/recognition', recognitionRouter);

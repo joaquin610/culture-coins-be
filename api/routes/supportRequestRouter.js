@@ -3,7 +3,7 @@ const router = express.Router();
 const SupportRequest = require('../controllers/supportRequestController')
 const validateToken = require('../middlewares/validateToken');
 
-//router.get('/:id', validateJWT, carts.detail)
+
 router.post('/',validateToken, SupportRequest.add);
 router.get('/request/:id',validateToken, SupportRequest.getRequestById );
 router.get('/requests/:user',validateToken, SupportRequest.listByUser);
