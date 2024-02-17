@@ -174,7 +174,7 @@ const controller = {
 
       const userFind = await User.findOne({ email, password });
       if (userFind) {
-        sendResponse(res, 200, true, req.token);
+        sendResponse(res, 200, true, {token:req.token});
       }else{
         sendResponse(res, 404, false, null, 'User not found');
       }
