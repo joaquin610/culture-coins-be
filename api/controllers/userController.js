@@ -169,7 +169,7 @@ const controller = {
       if (userFind) {
         sendResponse(res, 200, true, {token:req.token});
       }else{
-        sendResponse(res, 404, false, null, 'User not found');
+        sendResponse(res, 404, false, null, 'The email or password you entered is incorrect.');
       }
      
     } catch (error) {
