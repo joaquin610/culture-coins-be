@@ -124,6 +124,8 @@ const controller = {
       const { body } = req;
       const email = body.email;
 
+      if(!email.match('@igglobal.com')) throw 'Invalid email'; 
+
       const userFind = await User.findOne({ email});
 
       if(!userFind) {
@@ -155,7 +157,7 @@ const controller = {
       }
     } catch (error) {
       console.log(error);
-      sendResponse(res, 400, false, null, 'Internal server error');
+      sendResponse(res, 400, false, null, error ?? 'Internal server error');
     }
   },
   login: async (req, res) => {
