@@ -3,6 +3,7 @@ const User = require("../../database/schemas/User");
 const {sendEmail} = require ("../helpers/sentEmail")
 const {sendResponse}  = require ("../helpers/sendResponse");
 const {orderByDate}  = require ("../helpers/orderByDate");
+const {updatePoints} = require ("../helpers/assignPoints")
 require("dotenv").config();
 
 const controller = {
@@ -27,6 +28,8 @@ const controller = {
       newRecognition
         .save()
         .then(async (doc) => {
+          updatePoints(userTo, 10, true);
+          updatePoints(userFrom, 1, true);
           await sendEmail(userToEmail, "New Recognition", `User ${userFrom.nickName} has recognized you`);
         })
         .catch((err) => {
