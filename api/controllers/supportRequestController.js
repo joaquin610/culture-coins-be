@@ -13,15 +13,14 @@ function sanitizeHTMLTags(input) {
 const controller = {
   add: async (req, res) => {
     try {
-      const {title, message, priority, userFrom} = req.body;
+      const {title, message, priority, userFrom, community} = req.body;
       const mensajeSanitizado = `${title}\n\n${sanitizeHTMLTags(message)}`;
       const newSupportRequest = new SupportRequest({
         title : title,
         message: message,
         priority: priority,
         userFrom: userFrom,
-        createdAt: new Date(),
-        updatedAt: null
+        community: community,
       });
 
       newSupportRequest
@@ -37,10 +36,6 @@ const controller = {
           );
           const user = await User.findOne({ email: userFrom });
           const points = priority === "urgent" ?  2 : priority === "next-day" ?  1 :  0;
-
-          // 'urgent'
-          // 'next-day'
-          // 'within-week'
           
           updatePoints(user, points, false);
         })
@@ -51,6 +46,21 @@ const controller = {
     } catch (error) {
       console.error(error);
       sendResponse(res, 500, false ,null, "Internal server error");
+    }
+  },
+  list: async (req, res) => {
+    try {
+      let list = await SupportRequest.find({
+        isDeleted: false,
+        status: { $ne: 'Done' } 
+    });
+    
+        list = orderByDate(list);
+        sendResponse(res, 200, true ,list);
+
+    } catch (error) {
+      console.log(error);
+      sendResponse(res, 500, false ,null, "Internal Error");
     }
   },
   listByUser: async (req, res) => {

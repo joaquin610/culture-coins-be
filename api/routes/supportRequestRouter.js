@@ -5,6 +5,7 @@ const validateToken = require('../middlewares/validateToken');
 
 
 router.post('/',validateToken, SupportRequest.add);
+router.get('/requests',validateToken, SupportRequest.list);
 router.get('/request/:id',validateToken, SupportRequest.getRequestById );
 router.get('/requests/:user',validateToken, SupportRequest.listByUser);
 router.put('/edit/:id',validateToken, SupportRequest.edit);

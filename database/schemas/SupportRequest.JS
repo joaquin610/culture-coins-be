@@ -6,11 +6,15 @@ const SupportRequestSchema = new Schema({
     message : String,
     priority : String,
     userFrom : String,
+    community : String,
     createdAt: {
         type: Date,
         default: Date.now
     },
-    updatedAt: Date,
+    updatedAt: {
+        type: Date,
+        default: null
+    },
     status: {
         type: String,
         default: "Pending"
