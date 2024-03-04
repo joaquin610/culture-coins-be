@@ -2,6 +2,7 @@ const SupportRequest = require("../../database/schemas/SupportRequest");
 const { sendEmail } = require("../helpers/sentEmail");
 const {sendResponse}  = require ("../helpers/sendResponse");
 const {orderByDate}  = require ("../helpers/orderByDate");
+const {updatePoints} = require ("../helpers/assignPoints")
 const User = require("../../database/schemas/User");
 require("dotenv").config();
 
@@ -12,14 +13,13 @@ function sanitizeHTMLTags(input) {
 const controller = {
   add: async (req, res) => {
     try {
-      const { body } = req;
-      const mensajeSanitizado = `${body.title}\n\n${sanitizeHTMLTags(body.message)}`;
-
+      const {title, message, priority, userFrom} = req.body;
+      const mensajeSanitizado = `${title}\n\n${sanitizeHTMLTags(message)}`;
       const newSupportRequest = new SupportRequest({
-        title : body.title,
-        message: body.message,
-        priority: body.priority,
-        userFrom: body.userFrom,
+        title : title,
+        message: message,
+        priority: priority,
+        userFrom: userFrom,
         createdAt: new Date(),
         updatedAt: null
       });
@@ -27,7 +27,7 @@ const controller = {
       newSupportRequest
         .save()
         .then(async (doc) => {
-          const supports = await User.find({ support: true });
+          const supports = await User.find({ receiveSupportRequest: true });
           const supportEmails = supports.map((user) => user.email);
 
           await sendEmail(
@@ -35,6 +35,14 @@ const controller = {
             "Culture coins - someone needs your help",
             mensajeSanitizado
           );
+          const user = await User.findOne({ email: userFrom });
+          const points = priority === "urgent" ?  2 : priority === "next-day" ?  1 :  0;
+
+          // 'urgent'
+          // 'next-day'
+          // 'within-week'
+          
+          updatePoints(user, points, false);
         })
         .catch((err) => {
           console.error(err);
