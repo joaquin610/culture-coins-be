@@ -2,7 +2,7 @@ const User = require("../../database/schemas/User");
 const { sendResponse } = require("../helpers/sendResponse");
 const { sendEmail } = require("../helpers/sentEmail");
 require("dotenv").config();
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const controller = {
   add: async (req, res) => {
@@ -16,7 +16,8 @@ const controller = {
         admin: body.admin,
         receiveSupportRequest: body.receiveSupportRequest,
         communities: body.communities,
-        teams: body.teams
+        teams: body.teams,
+        avatar: body.avatar ?? "",
       });
 
       newUser
@@ -30,12 +31,12 @@ const controller = {
       sendResponse(res, 200, true, newUser);
     } catch (error) {
       console.log(error);
-      sendResponse(res, 400, false, null, 'Internal server error');
+      sendResponse(res, 400, false, null, "Internal server error");
     }
   },
   addLogin: async (req, res) => {
-     try {
-      const email = req._json.mail; 
+    try {
+      const email = req._json.mail;
       const user = await User.findOne({ email });
       if (!user) {
         try {
@@ -47,46 +48,43 @@ const controller = {
             email: req._json.mail,
             admin: false,
             receiveSupportRequest: false,
-            communities:[],
-            teams: []
+            communities: [],
+            teams: [],
           });
-    
+
           newUser
             .save()
             .then(async (doc) => {
-              await sendEmail(req._json.mail, "New User", `welcome culture coins`);
+              await sendEmail(
+                req._json.mail,
+                "New User",
+                `welcome culture coins`
+              );
             })
             .catch((err) => {
               console.error(err);
-            }); 
+            });
           sendResponse(res, 200, true, newUser);
         } catch (error) {
           console.log(error);
-          sendResponse(res, 400, false, null, 'Internal server error');
+          sendResponse(res, 400, false, null, "Internal server error");
         }
       }
-
-     } catch (error) {
-
-     }
+    } catch (error) {}
   },
   getUserByEmail: async (req, res) => {
-
-    const token = req.headers['authorization'];
+    const token = req.headers["authorization"];
 
     try {
-      
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-
         const email = user.email;
 
         const userFind = await User.findOne({ email });
         if (!userFind) {
-          return sendResponse(res, 404, false, null, 'User not found');
+          return sendResponse(res, 404, false, null, "User not found");
         }
         return sendResponse(res, 200, true, userFind);
       });
-
     } catch (err) {
       res.status(500).json({ message: err.message, ok: false });
     }
@@ -95,18 +93,15 @@ const controller = {
     const { _id } = req.body;
     const updateData = req.body;
     try {
-      const user = await User.findOneAndUpdate(
-        { _id: _id },
-        updateData,
-        { new: true }
-      );
+      const user = await User.findOneAndUpdate({ _id: _id }, updateData, {
+        new: true,
+      });
 
       if (!user) {
-        throw 'User not found';
+        throw "User not found";
       }
 
       return sendResponse(res, 200, true, user);
-
     } catch (err) {
       res.status(404).json({ message: err, ok: false });
     }
@@ -116,7 +111,7 @@ const controller = {
       const users = await User.find();
       return sendResponse(res, 200, true, users);
     } catch (error) {
-      sendResponse(res, 500, false ,null, "Internal Error");
+      sendResponse(res, 500, false, null, "Internal Error");
     }
   },
   register: async (req, res) => {
@@ -124,62 +119,66 @@ const controller = {
       const { body } = req;
       const email = body.email;
 
-      if(!email.match('@igglobal.com')) throw 'Invalid email'; 
+      if (!email.match("@igglobal.com")) throw "Invalid email";
 
-      const userFind = await User.findOne({ email});
+      const userFind = await User.findOne({ email });
 
-      if(!userFind) {
-      const { body } = req;
-      const newUser = new User({
-        nickName: body.nickName,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        email: email,
-        password: body.password,
-        admin: false,
-        receiveSupportRequest: false,
-        communities: [],
-        teams: []
-      });
-
-      newUser
-        .save()
-        .then(async (doc) => {
-          await sendEmail(email, "New User", `welcome culture coins`);
-        })
-        .catch((err) => {
-          console.error(err);
+      if (!userFind) {
+        const { body } = req;
+        const newUser = new User({
+          nickName: body.nickName,
+          firstName: body.firstName,
+          lastName: body.lastName,
+          email: email,
+          password: body.password,
+          admin: false,
+          receiveSupportRequest: false,
+          communities: [],
+          teams: [],
+          avatar: "",
         });
 
-      sendResponse(res, 200, true, newUser);
+        newUser
+          .save()
+          .then(async (doc) => {
+            await sendEmail(email, "New User", `welcome culture coins`);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+
+        sendResponse(res, 200, true, newUser);
       } else {
-        sendResponse(res, 409 , false, null, 'User already exists');
+        sendResponse(res, 409, false, null, "User already exists");
       }
     } catch (error) {
       console.log(error);
-      sendResponse(res, 400, false, null, error ?? 'Internal server error');
+      sendResponse(res, 400, false, null, error ?? "Internal server error");
     }
   },
   login: async (req, res) => {
     try {
-
       const { body } = req;
       const email = body.username;
       const password = body.password;
 
       const userFind = await User.findOne({ email, password });
       if (userFind) {
-        sendResponse(res, 200, true, {token:req.token});
-      }else{
-        sendResponse(res, 404, false, null, 'The email or password you entered is incorrect.');
+        sendResponse(res, 200, true, { token: req.token });
+      } else {
+        sendResponse(
+          res,
+          404,
+          false,
+          null,
+          "The email or password you entered is incorrect."
+        );
       }
-     
     } catch (error) {
       console.log(error);
-      sendResponse(res, 400, false, null, 'Internal server error');
+      sendResponse(res, 400, false, null, "Internal server error");
     }
-  } 
-
+  },
 };
 
-module.exports = controller;  
+module.exports = controller;

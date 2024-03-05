@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     admin : Boolean,
     receiveSupportRequest : Boolean,
     password: String,
+    avatar: String,
     communities : [String],
     teams:[String],
     points: {
