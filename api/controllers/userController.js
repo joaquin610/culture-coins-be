@@ -119,7 +119,7 @@ const controller = {
       const { body } = req;
       const email = body.email;
 
-      if (!email.match("@igglobal.com")) throw "Invalid email";
+      if (!(email.match("@igglobal.com") || email.match("@infogain.com"))) throw "Invalid email";
 
       const userFind = await User.findOne({ email });
 

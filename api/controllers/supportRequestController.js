@@ -26,7 +26,7 @@ const controller = {
       newSupportRequest
         .save()
         .then(async (doc) => {
-          const supports = await User.find({ receiveSupportRequest: true });
+          const supports = await User.find({ receiveSupportRequest: true, communities: community });
           const supportEmails = supports.map((user) => user.email);
 
           await sendEmail(

@@ -13,7 +13,7 @@ passport.use(new MicrosoftStrategy({
     const email = profile._json.mail;
 
     // Verifica si el correo electrónico termina en '@igglobal.com'
-    if (email.endsWith('@igglobal.com')) {
+    if (email.endsWith('@igglobal.com') || email.endsWith('@infogain')) {
       return done('Invalid email');
     }
     userRouter.addLogin(profile)

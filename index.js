@@ -22,7 +22,7 @@ const cors = require('cors');
 
 app.get('/:user', (req, res) => {
   const user  = req.params.user;
-  if (user.endsWith("@igglobal.com")) {
+  if (email.endsWith('@igglobal.com') || email.endsWith('@infogain')) {
     res.send('Hola ' + user + ' eres empleado de infogain');
 } else {
   res.send('Hola ' + user + ' eres externo a infogain');
