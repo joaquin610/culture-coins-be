@@ -90,12 +90,20 @@ const controller = {
     }
   },
   updateUser: async (req, res) => {
-    const { _id } = req.body;
-    const updateData = req.body;
+    const { _id, nickName, receiveSupportRequest, avatar, communities, teams } = req.body;
+
     try {
-      const user = await User.findOneAndUpdate({ _id: _id }, updateData, {
-        new: true,
-      });
+      const existingUser = await User.findOne({ nickName });
+    
+      if (existingUser && String(existingUser._id) !== String(_id)) {
+        throw "Nickname already in use";
+      }
+    
+      const user = await User.findOneAndUpdate(
+        { _id },
+        { nickName, receiveSupportRequest, avatar, communities, teams },
+        { new: true }
+      );
 
       if (!user) {
         throw "User not found";
@@ -116,21 +124,21 @@ const controller = {
   },
   register: async (req, res) => {
     try {
-      const { body } = req;
-      const email = body.email;
+      const { nickName, firstName, lastName, email, password }= req.body
+
 
       if (!(email.match("@igglobal.com") || email.match("@infogain.com"))) throw "Invalid email";
 
-      const userFind = await User.findOne({ email });
+      const userFind = await User.findOne({ $or: [{ email }, { nickName }] });
+      
 
       if (!userFind) {
-        const { body } = req;
         const newUser = new User({
-          nickName: body.nickName,
-          firstName: body.firstName,
-          lastName: body.lastName,
+          nickName: nickName,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
-          password: body.password,
+          password: password,
           admin: false,
           receiveSupportRequest: false,
           communities: [],
@@ -149,7 +157,7 @@ const controller = {
 
         sendResponse(res, 200, true, newUser);
       } else {
-        sendResponse(res, 409, false, null, "User already exists");
+        sendResponse(res, 409, false, null, "User or nickname already exists");
       }
     } catch (error) {
       console.log(error);
