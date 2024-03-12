@@ -96,7 +96,7 @@ const controller = {
       const existingUser = await User.findOne({ nickName });
     
       if (existingUser && String(existingUser._id) !== String(_id)) {
-        throw "Nickname already in use";
+        return sendResponse(res, 400, false, null, "Nickname already exists");
       }
     
       const user = await User.findOneAndUpdate(
@@ -111,7 +111,7 @@ const controller = {
 
       return sendResponse(res, 200, true, user);
     } catch (err) {
-      res.status(404).json({ message: err, ok: false });
+      return sendResponse(res, 400, false, null, err );
     }
   },
   getListUsers: async (req, res) => {
