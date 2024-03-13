@@ -22,6 +22,10 @@ const SupportRequestSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    colaborators: {
+        type: Array,
+        default: []
     }
 })
 

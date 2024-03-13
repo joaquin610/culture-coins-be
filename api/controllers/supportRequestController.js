@@ -21,6 +21,7 @@ const controller = {
         priority: priority,
         userFrom: userFrom,
         community: community,
+        colaborators: [],
       });
 
       newSupportRequest
@@ -147,7 +148,7 @@ const controller = {
         return sendResponse(res, 404, false ,null, "Support request not found");
       }
       if(existingSupportRequest.status === "Pending"){
-        existingSupportRequest.status = "In progress";
+        existingSupportRequest.status = "In Progress";
       }else{
         existingSupportRequest.status = "Done";
       }
