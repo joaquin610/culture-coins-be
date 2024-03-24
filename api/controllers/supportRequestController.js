@@ -58,6 +58,7 @@ const controller = {
       let list = await SupportRequest.find({
         isDeleted: false,
         status: { $ne: "Done" },
+        userFrom: { $ne: req.user.email }
       });
 
       list = orderByDate(list);
@@ -170,6 +171,7 @@ const controller = {
       const { email } = req.body;
 
       const existingSupportRequest = await SupportRequest.findById(id);
+
       const user = await User.findOne({ email: email });
 
       const userToSave = {
@@ -179,6 +181,11 @@ const controller = {
 
       if (existingSupportRequest.length === 0) {
         return sendResponse(res, 404, false, null, "Support request not found");
+      }
+
+      const colaboratorExists = existingSupportRequest.colaborators.some(colaborator => colaborator.email === email);
+      if(colaboratorExists) {
+        return sendResponse(res, 404, false, null, `You have already applied to ${existingSupportRequest.title}.`);
       }
 
       existingSupportRequest.colaborators.push(userToSave);
